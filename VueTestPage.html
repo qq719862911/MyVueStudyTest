@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    searchName:"",
+                    i1: 0,
+                    i2: 0,
+                    i3: 0,
+                    msg: "<a href='http://www.rupeng.com'>rupeng</a>"
+                    , isVip: true
+                    , persons: [
+                        { id: 1, name: 'aaa', age: '13' },
+                        { id: 2, name: 'ssss2', age: '12' }, { id: 3, name: 'ggg3', age: '19' }]
+                },
+                methods: {
+                    calcAdd: function () {
+                        this.i3 = parseInt(this.i1) + parseInt(this.i2);
+                    },
+                    change1: function () {
+                        this.i3 = 666;
+                    },
+                    change2: function () {
+                        this.data = { i1: 9, i2: 99, i3: 999 }
+                    },
+                    cahngeVip: function () {
+                        if (this.isVip) {
+                            this.isVip = false;
+                        } else {
+                            this.isVip = true;
+                        }
+                    }
+                },
+                computed: {
+                    filterPersons: function () {
+                        var searchName = this.searchName;
+                        return this.persons
+                            .sort(function (p1, p2) { return p1.age - p2.age; })
+                            .filter(function (p) {
+                                if (searchName) {
+                                    return p.name.indexOf(searchName) >= 0;
+                                }
+                                else {
+                                    return true;
+                                }
+                            });
+                    }
+                }
+            });
+           
+        }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="i1"/>
+        <input type="text" v-model="i2"/>
+        <input type="button" value="="v-on:click="calcAdd"/>
+        <span   >{{i3}}</span>
+        <input type="button" value="change"v-on:click="change1" />
+        <div>
+            <span v-bind:title="i3">{{i3}}</span>
+            <span v-html="msg"></span>   <!--原样输出-->
+            <span>{{msg}}</span>   <!--房子xss漏洞，被编码后输出-->
+                 <div v-show="isVip">VIP</div>
+            <input type="button" value="change" v-on:click="cahngeVip" />
+        </div>
+        <div>
+            <div v-if="isVip">VIp</div>
+        </div>
+        <div>
+            <ul>
+                <li v-for="person in persons">id:{{person.id}};name:{{person.name}};age:{{person.age}}</li>
+            </ul>
+        </div>
+        <div>
+            searchName:   <input type="text" v-model="searchName" />
+            <ul>
+                <li v-for="person in filterPersons">Id:{{person.id}} name:{{person.name}} age:{{person.age}}</li>
+            </ul>
+        </div>
+    </div>
+   
+</body>
+</html>
