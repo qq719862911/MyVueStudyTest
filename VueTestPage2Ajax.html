@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    searchName: "",
+
+                    pId: 0,
+                    pName: '',
+                    pAge: 0,
+                    persons: [
+                        { id: 1, name: 'aaa', age: '13' },
+                        { id: 2, name: 'aaa2', age: '12' }]
+                },
+                methods: {
+                    addNew: function () {
+                        var newPerson = { id: this.pId, name: this.pName, age: this.pAge };
+                        this.persons.push(newPerson);
+                    },
+                    personClick: function (p) {
+                        alert(p.name);
+                    }
+                },
+                computed: {
+                    test1: function () {
+                        return "hello" + this.searchName;
+                    },     //写的computed中可以缓存
+                    test2: function () {
+                        return [{ name: "tom", imgSrc: "1.jpg" }
+                            , { name: "tom2", imgSrc: "2.jpg" }
+                        ]
+                    }
+
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <!--动态给集合添加元素（比如ajax动态加载），要往data对象中添加，不能覆盖data中的对象：-->
+        <ul>
+            <li v-for="person in persons" v-on:click="personClick(person)">
+                <span>Id:{{person.id}}</span>
+                <span>name:{{person.name}}</span>
+                <span>age:{{person.age}}</span>
+            </li>
+        </ul>
+        <div>
+            id:<input type="text" v-model="pId" />
+            name:<input type="text" v-model="pName" />
+            age:<input type="text" v-model="pAge" />
+            <input type="button" value="新增" v-on:click="addNew" />
+        </div>
+        <div>
+            searchName: <input type="text" v-model="searchName" name="name" value="" />
+            <ul>
+                <li v-for="item in test2">
+                    {{item.name}}
+                    {{item.imgSrc}}
+                </li>
+            </ul>
+            test1:{{test1}}
+        </div>
+    </div>
+</body>
+</html>
